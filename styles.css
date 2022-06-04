@@ -1,0 +1,24 @@
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.tile {
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    background-color: rgb(169, 168, 168);
+    width: 100px;
+    height: 50px;
+    transition-duration: 0.7s;
+}
+
+.highlighted {
+    background-color: black;
+}
