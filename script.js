@@ -1,6 +1,8 @@
 const maxWidth = 1400;
 const maxHeight = 800;
 let currentSize = 16;
+let drawingModeEnabled = false;
+let colorMode = "Random";
 
 const body = document.getElementsByName("body");
 const container = document.createElement('div');
@@ -21,6 +23,8 @@ function initializePage() {
     const clearButton = document.querySelector("#clearBtn");
     clearButton.addEventListener('click', clear);
 
+    container.addEventListener('click', toggleDrawingMode);
+
 }
 
 function createNGrid(n) {
@@ -39,7 +43,7 @@ function createNGrid(n) {
 
             //TODO update to make that box 10% darker each hover instead of immediatley being black
             // add a darken method that uses (this) reference to update the style on that box.
-            gridSquare.addEventListener('mouseenter', darken);
+            gridSquare.addEventListener('mouseenter', changeColor);
             //gridSquare.addEventListener('mouseleave', (e) => e.target.classList.remove("highlighted"));
 
             rowContainer.appendChild(gridSquare);
@@ -113,7 +117,7 @@ function increaseSize(n) {
             gridSquare.style.height = Math.round(maxHeight / currentSize) + "px";
     
             //TODO update to make that box 10% darker each hover instead of immediatley being black
-            gridSquare.addEventListener('mouseenter', darken);
+            gridSquare.addEventListener('mouseenter', changeColor);
             //gridSquare.addEventListener('mouseleave', (e) => e.target.classList.remove("highlighted"));
             row.appendChild(gridSquare);
         }
@@ -132,7 +136,7 @@ function increaseSize(n) {
             gridSquare.style.height = Math.round(maxHeight / currentSize) + "px";
 
             //TODO update to make that box 10% darker each hover instead of immediatley being black
-            gridSquare.addEventListener('mouseenter', darken);
+            gridSquare.addEventListener('mouseenter', changeColor);
             rowContainer.appendChild(gridSquare);
         }
 
@@ -153,13 +157,43 @@ function clear() {
     initializePage();
 }
 
+function changeColor(event) {
+
+    if (colorMode == "Random" && drawingModeEnabled) {
+        randomColor(event);
+    } else if (colorMode == "Darken" && drawingModeEnabled) {
+        darken(event);
+    }
+}
+
 function darken(event) {
 
-    const currentTile = event.target;
-
+    const currentTile = event.target;     
 }
 
 function randomColor(event) {
 
+    
+    let maxVal = 0xFFFFFF;
+    let randomNumber = Math.random() * maxVal;
+    while (randomNumber >= 0xEEEEEE) {
+        randomNumber = Math.random() * maxVal;
+    }
+    randomNumber = Math.floor(randomNumber);
+    console.log(randomNumber);
+    let randomColor = randomNumber.toString(16);
+    
+    randomColor = `#${randomColor.padStart(6, 0).toUpperCase()}`;   
     const currentTile = event.target;
+    
+    currentTile.style.backgroundColor = randomColor;
+}
+
+function toggleDrawingMode() {
+
+    if (drawingModeEnabled) {
+        drawingModeEnabled = false;
+    } else {
+        drawingModeEnabled = true;
+    }
 }
