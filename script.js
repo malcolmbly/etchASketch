@@ -2,7 +2,7 @@ const maxWidth = 1400;
 const maxHeight = 800;
 let currentSize = 16;
 let drawingModeEnabled = false;
-let colorMode = "Random";
+let colorMode = "Darken";
 
 const body = document.getElementsByName("body");
 const container = document.createElement('div');
@@ -25,6 +25,8 @@ function initializePage() {
 
     container.addEventListener('click', toggleDrawingMode);
 
+    const toggleButton = document.querySelector("#toggleBtn");
+    toggleButton.addEventListener('click', switchColorMode);
 }
 
 function createNGrid(n) {
@@ -70,9 +72,7 @@ function resize() {
 
 function decreaseSize(n) {
 
-
     currentSize -= n;
-    console.log(currentSize);
     for (let i = 0; i < n; i++){
         const row = container.firstElementChild;
         
@@ -116,9 +116,7 @@ function increaseSize(n) {
             gridSquare.style.width = Math.round(maxWidth / currentSize) + "px";
             gridSquare.style.height = Math.round(maxHeight / currentSize) + "px";
     
-            //TODO update to make that box 10% darker each hover instead of immediatley being black
             gridSquare.addEventListener('mouseenter', changeColor);
-            //gridSquare.addEventListener('mouseleave', (e) => e.target.classList.remove("highlighted"));
             row.appendChild(gridSquare);
         }
     }
@@ -135,7 +133,6 @@ function increaseSize(n) {
             gridSquare.style.width = Math.round(maxWidth / currentSize) + "px";
             gridSquare.style.height = Math.round(maxHeight / currentSize) + "px";
 
-            //TODO update to make that box 10% darker each hover instead of immediatley being black
             gridSquare.addEventListener('mouseenter', changeColor);
             rowContainer.appendChild(gridSquare);
         }
@@ -159,7 +156,7 @@ function clear() {
 
 function changeColor(event) {
 
-    if (colorMode == "Random" && drawingModeEnabled) {
+    if (colorMode == "Rainbow" && drawingModeEnabled) {
         randomColor(event);
     } else if (colorMode == "Darken" && drawingModeEnabled) {
         darken(event);
@@ -168,7 +165,17 @@ function changeColor(event) {
 
 function darken(event) {
 
-    const currentTile = event.target;     
+    const currentTile = event.target;
+    let currentColor = window.getComputedStyle(currentTile).getPropertyValue('background-color');
+    //the above line returns something like "rgb(221,221,221), need to convert to hex."
+    currentColor = currentColor.slice(4, -1);
+    let colorArray = currentColor.split(', ');
+    for (const index in colorArray) {
+        colorArray[index] -= Math.round(0.2 * colorArray[index]);
+    }
+    
+    let newColor = "rgb(" + colorArray.toString() + ")";
+    currentTile.style.backgroundColor = newColor;
 }
 
 function randomColor(event) {
@@ -180,7 +187,6 @@ function randomColor(event) {
         randomNumber = Math.random() * maxVal;
     }
     randomNumber = Math.floor(randomNumber);
-    console.log(randomNumber);
     let randomColor = randomNumber.toString(16);
     
     randomColor = `#${randomColor.padStart(6, 0).toUpperCase()}`;   
@@ -190,10 +196,27 @@ function randomColor(event) {
 }
 
 function toggleDrawingMode() {
-
+    
     if (drawingModeEnabled) {
         drawingModeEnabled = false;
     } else {
         drawingModeEnabled = true;
+    }
+}
+
+function switchColorMode(event) {
+    
+    if (event.target.textContent == "Rainbow Mode") {
+
+        colorMode = "Rainbow";
+        event.target.textContent = "Dark Mode";
+    } else if (event.target.textContent == "Dark Mode") {
+
+        colorMode = "Darken";
+        event.target.textContent = "Rainbow Mode";
+    } else {
+
+        colorMode = "Rainbow";
+        event.target.textContent = "Dark Mode";
     }
 }
