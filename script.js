@@ -1,16 +1,16 @@
-const maxWidth = 1400;
-const maxHeight = 800;
+const maxWidth = 800;
+const maxHeight = 500;
 let currentSize = 16;
 let drawingModeEnabled = false;
 let colorMode = "Darken";
 
-const body = document.getElementsByName("body");
+const body = document.querySelector('.everything');
 const container = document.createElement('div');
 // TODO add an event listener for click that "enables" the drawing mode
 // when this isn't enabled, the listener for each grid needs to be removed/disabled
 // or a boolean inside a function call stops the class from being toggled.
 container.classList.add('grid');
-document.body.appendChild(container);
+body.appendChild(container);
 initializePage();
 
 function initializePage() {
@@ -171,7 +171,7 @@ function darken(event) {
     currentColor = currentColor.slice(4, -1);
     let colorArray = currentColor.split(', ');
     for (const index in colorArray) {
-        colorArray[index] -= Math.round(0.2 * colorArray[index]);
+        colorArray[index] -= Math.round(0.5 * colorArray[index]);
     }
     
     let newColor = "rgb(" + colorArray.toString() + ")";

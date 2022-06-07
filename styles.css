@@ -6,17 +6,30 @@
 .grid {
     display: flex;
     flex-direction: column;
-
+    align-items: center;
+    border-style: solid;
+    border-width: 10px;
+    border-color: black;
+    width:800px;
 }
 
 .tile {
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
     background-color: #DDDDDD;
     transition-duration: 0.7s;
 }
 
 .highlighted {
     background-color: black;
+}
+
+.h1{   
+    text-align: center;
+}
+
+.everything{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    padding:50px;
 }
